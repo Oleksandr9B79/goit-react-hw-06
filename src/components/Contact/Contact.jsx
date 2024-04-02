@@ -1,29 +1,35 @@
-import React from "react";
-import css from "./Contact.module.css";
-import { FaUser } from "react-icons/fa";
-import { FaPhone } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
-import { deleteContact } from "../../redux/contactsSlice";
+import css from './Contact.module.css';
+import { FaPhone } from 'react-icons/fa6';
+import { IoPersonSharp } from 'react-icons/io5';
+import { useDispatch } from 'react-redux';
+import { deleteContact } from '../../redux/contactsSlice';
 
-const Contact = ({ contact: { name, number, id } }) => {
+export default function Contact({ item }) {
   const dispatch = useDispatch();
-  const deleteContacts = () => dispatch(deleteContact(id));
+  const { id, name, number } = item;
+
+  function handleClick() {
+    dispatch(deleteContact(id));
+  }
+
   return (
-    <div className={css.container} id={id}>
-      <ul className={css.list}>
-        <li>
-          <FaUser height={10} width={10} />
-          {name}
-        </li>
-        <li>
-          <FaPhone />
-          {number}
-        </li>
-      </ul>
-      <button type="button" onClick={deleteContacts}>
+    <li className={css.item}>
+      <div>
+        <ContactInfo icon={<IoPersonSharp />}>{name}</ContactInfo>
+        <ContactInfo icon={<FaPhone />}>{number}</ContactInfo>
+      </div>
+      <button className={css.itemButton} onClick={handleClick}>
         Delete
       </button>
-    </div>
+    </li>
   );
-};
-export default Contact;
+}
+
+function ContactInfo({ icon, children }) {
+  return (
+    <p className={css.info}>
+      <span className={css.iconWrapper}>{icon}</span>
+      <span>{children}</span>
+    </p>
+  );
+}
